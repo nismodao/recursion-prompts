@@ -42,7 +42,6 @@ return result += sum(arrCopy);
 // 3. Sum all numbers in an array containing nested arrays.
 // Example: arraySum([1,[2,3],[[4]],5]); // 15
 var arraySum = function(arr) {
-  var arrCopy = arr.slice();
   return arr.reduce(function(result,value) {
       if (Array.isArray(value)) {
         return result += (arraySum(value));
@@ -123,10 +122,30 @@ var reverse = function(string,last) {
 
 
 // 8. Write a function that determines if a string is a palindrome.
+
+//Iterative version with reduce for kicks
+
+// var palindrome = function(string) {
+//   string = string.toLowerCase().split(" ").join("");
+//   return Array.prototype.reduce.call(string, function(total,item,index,collection) {
+// 	if (item === collection[string.length - 1 - index] && total === true) {
+// 		total = true;
+// 	} else {
+// 		total = false;
+// 	}
+// 	return total;
+//   },true)
+// };
+
 var palindrome = function(string) {
-
+  string = string.toLowerCase().split(" ").join("");
+  var last = string.length-1;
+  if (string.length <=1) {
+  	return true;
+  } else {
+  return (string[0] === string[last] && palindrome(string.slice(1,last)));
+  }
 };
-
 
 // 9. Write a function that returns the remainder of x divided by y without using the
 // modulo (%) operator.
@@ -134,7 +153,21 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function(x, y) {
+	if (x === 0 && y > 0) return 0;
+	if (x === 0 && y === 0) return NaN.toString(); 
+	if (x < 0 && y < 0) {
+	  if (x - y > 0) {
+	  	return x;
+	  } else {
+	  	return modulo(x-y,y)
+	  }	
 
+	} else if (x - y < 0) {
+	  return x;
+	} else {
+	  return modulo(x - y, y);
+	}
+  
 };
 
 
@@ -142,12 +175,28 @@ var modulo = function(x, y) {
 // JavaScript's Math object.
 var multiply = function(x, y) {
 
+	if (x === 0 || y === 0) return 0;
+
+	if (x < 0 && y < 0) {
+	  if (y === 1) {
+	    return x;
+	} else {
+	  return - x + multiply(x,y+1);
+	}
+
+	} else if (y === 1) {
+		return x;
+	} else {
+		return x + multiply(x,y-1);
+	}
 };
 
 
 // 11. Write a function that divides two numbers without using the / operator  or
 // JavaScript's Math object.
 var divide = function(x, y) {
+
+
 
 };
 
@@ -158,7 +207,16 @@ var divide = function(x, y) {
 // http://www.cse.wustl.edu/~kjg/cse131/Notes/Recursion/recursion.html
 // https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/the-euclidean-algorithm
 var gcd = function(x, y) {
-
+  if (x === 0 || y === 0) return null;
+  if (x < 0 || y < 0) return null;	
+  var remainder = x % y;
+  if (remainder === 0) {
+  	return y;
+  } else {
+  	x = y;
+  	y=remainder;
+  }
+  return gcd(x,y);
 };
 
 
@@ -168,20 +226,36 @@ var gcd = function(x, y) {
 // compareStr('', '') // true
 // compareStr('tomato', 'tomato') // true
 var compareStr = function(str1, str2) {
-
+  if (str1.length === 0 && str2.length === 0) {
+  	return true;
+  } else {
+    return (str1[0] === str2[0] && compareStr(str1.slice(1), str2.slice(1)));
+  }
 };
 
 
 // 14. Write a function that accepts a string and creates an array where each letter
 // occupies an index of the array.
 var createArray = function(str){
-
+  var result = [];
+  if (str.length === 0) {
+  	return result;
+  } else {
+  	result = result.concat(str[0]);
+  }
+  return result = result.concat(createArray(str.slice(1))); 
 };
 
 
 // 15. Reverse the order of an array
 var reverseArr = function (array) {
-
+  var result =[];
+  if (array.length === 0) {
+  	return result;
+  } else {
+  	result = result.concat(array.pop());
+  }
+  return result = result.concat(reverseArr(array));	
 };
 
 
@@ -189,6 +263,13 @@ var reverseArr = function (array) {
 // buildList(0,5) // [0,0,0,0,0]
 // buildList(7,3) // [7,7,7]
 var buildList = function(value, length) {
+  var result = [];
+  if (length === 0) {
+  	return result;
+  } else {
+  	Array.isArray(value) ? result.push(value) : result = result.concat(value);
+  }
+  return result.concat(buildList((value),--length));
 
 };
 
