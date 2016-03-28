@@ -5,34 +5,90 @@
 // Example:  5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5);  // 120
 var factorial = function(n) {
-
+	if (n === 0 || n === 1) {
+		return 1;
+	} else if (n < 0) {
+		return null;
+	} else {
+		return n * factorial(n-1);
+	}
 };
 
 
 // 2. Compute the sum of an array of integers.
 // Example:  sum([1, 2, 3, 4, 5, 6]);  // 21
-var sum = function(array) {
+// var sum = function(array) {
+// var arrCopy = array.slice();
+// if (array.length === 0) return undefined;
+// if (arrCopy.length === 1) {
+// return arrCopy[0];
+// } 
+// return arrCopy.shift() + sum(arrCopy);
+// };
 
+var sum = function(array) {
+var arrCopy = array.slice();
+var result = 0;
+if (arrCopy.length === 0) return undefined;
+if (arrCopy.length === 1) {
+  return result + arrCopy[0];
+} else {
+result += arrCopy.shift();
+}
+return result += sum(arrCopy);
 };
 
 
 // 3. Sum all numbers in an array containing nested arrays.
 // Example: arraySum([1,[2,3],[[4]],5]); // 15
 var arraySum = function(arr) {
-
-};
+  var arrCopy = arr.slice();
+  return arr.reduce(function(result,value) {
+      if (Array.isArray(value)) {
+        return result += (arraySum(value));
+      } else {
+        return result += value;
+      }
+    },0) 
+  };
 
 
 // 4. Check whether a number is even or not.
 var isEven = function(n) {
-
+	if (n < 0) n = n * -1;
+	if (n === 0) {
+		return true;
+	} else if (n === 1) {
+		return false;
+	} else {
+	return isEven(n-2);
+	}
 };
 
 
 // 5. Get the integers in range (x, y).
 // Example:  range(2, 9);  // [3, 4, 5, 6, 7, 8]
+//range(9,2) //[8,7,6,5,4,3]
 var range = function(x, y) {
+	var result = [];
+if (x < y) {	
+	if (y-x === 0) return [];
+	if (x === y - 1) {
+	  return result;
+	} else {
+	  result.push(x+1);
+	}
+	return result = result.concat(range(x+1,y));
+} else {
+	if (y-x === 0) return [];
+	if (x === y + 1) {
+	  return result;
+	} else {
+	  result.push(x-1);
+	}
+	return result = result.concat(range(x-1,y));
 
+}	
 };
 
 
@@ -42,13 +98,27 @@ var range = function(x, y) {
 // Example:  exponent(4,3);  // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
-
+ 	
+	if (exp === 0) {
+	  return 1;
+	} else {
+	  return exp > 0 ? base * exponent(base,exp-1) : 1 / (base * exponent(base,(exp*-1)-1))
+	} 
+ 
+ 
 };
 
 
 // 7. Write a function that accepts a string a reverses it.
-var reverse = function(string) {
-
+var reverse = function(string,last) {
+  var result = "";
+  last = last || string.length-1;
+  if (last === 0) {
+  	return result;
+  } else {
+  result += string[last];
+  }
+  return result += reverse(string,--last)
 };
 
 
