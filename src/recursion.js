@@ -112,13 +112,13 @@ var exponent = function(base, exp) {
 // 7. Write a function that accepts a string a reverses it.
 var reverse = function(string,last) {
   var result = "";
-  last = last || string.length-1;
-  if (last === 0) {
-  	return result;
+  last = last || string.length;
+  if (last === 1) {
+    return result + string[0];
   } else {
-  result += string[last];
+    result += string[last-1];
   }
-  return result += reverse(string,--last)
+  return result += reverse(string,last-1)
 };
 
 
