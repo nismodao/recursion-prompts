@@ -330,11 +330,11 @@ for (var prop in obj) {
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function(obj, key, newKey) {
 for (var prop in obj) {
-  if (obj.hasOwnProperty(key)) {
+  if (prop === key) {
   	obj[newKey] = obj[prop];
   	delete obj[prop];
   } else if (typeof obj[prop] === 'object') {
-  	countKeysInObj(obj[prop],key,newKey);
+    replaceKeysInObj(obj[prop],key,newKey);
   }
  }
  return obj;
@@ -348,9 +348,16 @@ for (var prop in obj) {
 // fibonacci(5);  // [0, 1, 1, 2, 3, 5]
 // Note:  The 0 is not counted.
 var fibonacci = function(n) {
-
+	if (n <= 0) return null;
+	var result = [0,1];
+	if (n===1) {
+	  return result;
+	} else {
+	result = fibonacci(n-1);
+	result.push(result[result.length-1] + result[result.length-2]);
+	return result;
+	}
 };
-
 
 // 22. Return the Fibonacci number located at index n of the Fibonacci sequence.
 // [0,1,1,2,3,5,8,13,21]
@@ -358,7 +365,10 @@ var fibonacci = function(n) {
 // nthFibo(7); // 13
 // nthFibo(3); // 2
 var nthFibo = function(n) {
-
+  if (n===0) return 0;
+  if (n===1) return 1;
+  if (n<=0) return null;
+  return nthFibo(n-1) + nthFibo(n-2);
 };
 
 
@@ -366,15 +376,29 @@ var nthFibo = function(n) {
 // var words = ['i', 'am', 'learning', 'recursion'];
 // capitalizedWords(words); // ['I', 'AM', 'LEARNING', 'RECURSION']
 var capitalizeWords = function(input) {
-
+  var result= [];
+  if (input.length === 0) {
+  	return result;
+  } else {
+  	result = result.concat(input.shift().toUpperCase());
+  }
+    return result = result.concat(capitalizeWords(input));
 };
 
 
 // 24. Given an array of strings, capitalize the first letter of each index.
 // capitalizeFirst(['car', 'poop', 'banana']); // ['Car', 'Poop', 'Banana']
 var capitalizeFirst = function(array) {
-
+	var result= [];
+  if (array.length === 0) {
+  	return result;
+  } else {
+  	var word = array.shift();
+  	result = result.concat(word[0].toUpperCase()+word.slice(1));
+  }
+    return result = result.concat(capitalizeFirst(array));
 };
+
 
 
 // 25. Return the sum of all even numbers in an object containing nested objects.
@@ -387,14 +411,29 @@ var capitalizeFirst = function(array) {
 // };
 // nestedEvenSum(obj1); // 10
 var nestedEvenSum = function(obj) {
-
+	var result = 0;
+	for (var prop in obj) {
+		if (typeof obj[prop] === 'number' && obj[prop] % 2 === 0) {
+			result += obj[prop];
+		} else if (typeof obj[prop] === 'object') {
+			result += nestedEvenSum(obj[prop]);
+		}
+	}
+	return result;
 };
 
 
 // 26. Flatten an array containing nested arrays.
 // Example: flatten([1,[2],[3,[[4]]],5]); // [1,2,3,4,5]
 var flatten = function(arrays) {
-
+	return arrays.reduce(function (result,item) {
+		if (typeof item === 'object') {
+			result = result.concat(flatten(item));
+		} else {
+			result = result.concat(item);
+		}
+		return result;
+	},[])
 };
 
 
@@ -404,7 +443,18 @@ var flatten = function(arrays) {
 // Example: compress([1, 2, 2, 3, 4, 4, 5, 5, 5]) // [1, 2, 3, 4, 5]
 // Example: compress([1, 2, 2, 3, 4, 4, 2, 5, 5, 5, 4, 4]) // [1, 2, 3, 4, 2, 5, 4]
 var compress = function(list) {
+var result = [];
+  if (list.length === 0) {
+  	return result;
+  } 
+  
+  var number = list.shift();
+  
+  if (number !== list[0]) {
+    result = result.concat(number);
+  }
 
+   return result = result.concat(compress(list));
 };
 
 
